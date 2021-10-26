@@ -1,0 +1,59 @@
+#cloud-config
+autoinstall:
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  identity: {hostname: glatt-hypervisor, password: $6$YU3Y3YEliWyXPsx4$aQkemkd77dk96VHKraAx8SmRX4i1fDQwRzu537c9un82UgDeMFm0bprtEjxwIbzW1s7CPUGeyUnVA22yKaXmw.,
+    realname: glatt, username: glatt}
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US.UTF-8
+  network:
+    ethernets:
+      enp0s31f6: {dhcp4: true}
+      enp1s0: {dhcp4: true}
+      enp2s0: {dhcp4: true}
+      enp3s0: {dhcp4: true}
+    version: 2
+  ssh:
+    allow-pw: true
+    authorized-keys: []
+    install-server: true
+    storage:
+    config:
+    - {ptable: gpt, path: /dev/sda,
+      wipe: superblock, preserve: false, name: '', grub_device: false, type: disk,
+      id: disk-sda}
+    - {ptable: gpt, path: /dev/sdb,
+      wipe: superblock, preserve: false, name: '', grub_device: false, type: disk,
+      id: disk-sdb}
+    - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1,
+      preserve: false, grub_device: true, type: partition, id: partition-3}
+    - {fstype: fat32, volume: partition-3, preserve: false, type: format, id: format-3}
+    - {device: disk-sdb, size: 536870912, wipe: superblock, flag: boot, number: 1,
+      preserve: false, grub_device: true, type: partition, id: partition-4}
+    - {fstype: fat32, volume: partition-4, preserve: false, type: format, id: format-4}
+    - {device: disk-sda, size: -1, wipe: superblock, flag: '', number: 2,
+      preserve: false, grub_device: false, type: partition, id: partition-5}
+    - {device: disk-sdb, size: -1, wipe: superblock, flag: '', number: 2,
+      preserve: false, grub_device: false, type: partition, id: partition-6}
+    - name: md0
+      raidlevel: raid1
+      devices: [partition-5, partition-6]
+      spare_devices: []
+      preserve: false
+      wipe: superblock-recursive
+      ptable: gpt
+      type: raid
+      id: raid-0
+    - {device: raid-0, size: -1, wipe: superblock, flag: '', number: 1,
+      preserve: false, grub_device: false, type: partition, id: partition-7}
+    - {fstype: ext4, volume: partition-7, preserve: false, type: format, id: format-5}
+    - {path: /, device: format-5, type: mount, id: mount-3}
+    - {path: /boot/efi, device: format-3, type: mount, id: mount-2}
+  updates: security
+  version: 1

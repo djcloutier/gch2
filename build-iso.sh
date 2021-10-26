@@ -1,6 +1,14 @@
 #!/bin/bash
-wget -N https://cdimage.ubuntu.com/ubuntu-server/focal/daily-live/current/focal-live-server-amd64.iso
+FILE=focal-live-server-amd64.iso
+if test -f "$FILE"; then
+    echo "$FILE exists."
+    else
+    wget -N https://cdimage.ubuntu.com/ubuntu-server/focal/daily-live/current/focal-live-server-amd64.iso
+fi
+
+rm -rf source-files
 mkdir source-files
+
 7z -y x focal-live-server-amd64.iso -osource-files
 rm -rf source-files/[BOOT]/
 cp grub.cfg source-files/boot/grub/
