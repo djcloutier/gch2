@@ -78,7 +78,7 @@ autoinstall:
   packages: 
     - cockpit
   late-commands:
-    - curl -o /target/usr/bin/setup https://raw.githubusercontent.com/djcloutier/gch/master/startup.sh
+    - curl -o /target/usr/bin/setup https://raw.githubusercontent.com/djcloutier/gch2/master/startup.sh
     - chmod +x /target/usr/bin/setup
   user-data: # Commands here run during first boot (cannot be interactive)
     runcmd:
