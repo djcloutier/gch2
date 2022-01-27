@@ -1,5 +1,16 @@
 #!/bin/bash
-echo "This script requires genisoimage and p7zip-full"
+
+#check if p7zip is installed
+if ! type 7z > /dev/null; then
+    echo "7z is not installed. Please install it and try again."
+    exit 1
+fi
+#check if genisoimage is installed
+if ! type genisoimage > /dev/null; then
+    echo "genisoimage is not installed. Please install it and try again."
+    exit 1
+fi
+
 FILE=focal-live-server-amd64.iso
 if test -f "$FILE"; then
     echo "$FILE exists."
