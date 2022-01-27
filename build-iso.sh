@@ -13,7 +13,7 @@ mkdir source-files
 rm -rf source-files/[BOOT]/
 cp grub.cfg source-files/boot/grub/
 mkdir source-files/server
-cp cp txt.cfg source-files/isolinux/
+cp txt.cfg source-files/isolinux/
 cp user-data source-files/server/
 touch source-files/server/meta-data
 cd source-files
